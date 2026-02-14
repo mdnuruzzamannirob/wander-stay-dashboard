@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import { AlertCircle, Eye, EyeOff } from "lucide-react";
 import { useSignInMutation } from "@/store/features/auth/authApi";
 
-const SignInForm = () => {
+const LoginForm = () => {
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -45,7 +45,7 @@ const SignInForm = () => {
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-119px)] items-center justify-center py-14">
+    <div className="flex min-h-dvh items-center justify-center py-14">
       <div className="border-brand-100 w-full max-w-120 rounded-xl border p-8 shadow-sm">
         {/* Title */}
         <div className="mb-5 flex flex-col items-center text-center">
@@ -134,12 +134,12 @@ const SignInForm = () => {
           <ButtonComp
             type="submit"
             loading={isLoading}
-            loadingText="Signing in..."
+            loadingText="Logging in..."
             size="lg"
             disabled={isLoading}
             className="h-11 w-full"
           >
-            Sign In
+            Login
           </ButtonComp>
         </form>
       </div>
@@ -147,4 +147,4 @@ const SignInForm = () => {
   );
 };
 
-export default SignInForm;
+export default LoginForm;

@@ -52,7 +52,7 @@ const ResetPasswordForm = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      router.push("/sign-in");
+      router.push("/login");
     }
   }, [isSuccess, router]);
 
@@ -206,10 +206,10 @@ const ResetPasswordForm = () => {
         <p className="mt-5 text-center text-sm text-slate-500">
           Back to{" "}
           <Link
-            href="/sign-in"
+            href="/login"
             className="text-primary font-medium transition hover:underline"
           >
-            Sign In
+            Login
           </Link>
         </p>
       </div>

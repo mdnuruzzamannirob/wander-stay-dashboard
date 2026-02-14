@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils/cn";
+import Image from "next/image";
 import Link from "next/link";
 
 const Logo = ({ className }: { className?: string }) => {
@@ -7,12 +8,13 @@ const Logo = ({ className }: { className?: string }) => {
       href="/"
       className={cn("flex w-fit shrink-0 flex-col -space-y-1.5", className)}
     >
-      <span className="text-primary text-3xl font-bold tracking-tighter">
-        CAYRE
-      </span>
-      <span className="text-[10px] font-medium text-slate-500 uppercase">
-        Cayman Resellers
-      </span>
+      <Image
+        alt="Logo"
+        src="/icons/logo.png"
+        width={120}
+        height={80}
+        className="h-auto"
+      />
     </Link>
   );
 };

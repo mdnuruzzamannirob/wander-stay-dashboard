@@ -97,10 +97,10 @@ const ForgotPasswordForm = () => {
         <p className="mt-5 text-center text-sm text-slate-500">
           Remembered your password?{" "}
           <Link
-            href="/sign-in"
+            href="/login"
             className="text-primary font-medium transition hover:underline"
           >
-            Sign In
+            Login
           </Link>
         </p>
       </div>
