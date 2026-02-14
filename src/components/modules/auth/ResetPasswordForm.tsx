@@ -37,18 +37,18 @@ const ResetPasswordForm = () => {
     defaultValue: "",
   });
 
-  useEffect(() => {
-    const storedEmail = sessionStorage.getItem("resetPasswordEmail");
-    const storedOTP = sessionStorage.getItem("resetPasswordOTP");
+  // useEffect(() => {
+  //   const storedEmail = sessionStorage.getItem("resetPasswordEmail");
+  //   const storedOTP = sessionStorage.getItem("resetPasswordOTP");
 
-    if (!storedEmail || !storedOTP) {
-      router.push("/forgot-password");
-      return;
-    }
+  //   if (!storedEmail || !storedOTP) {
+  //     router.push("/forgot-password");
+  //     return;
+  //   }
 
-    setEmail(storedEmail);
-    setOtp(storedOTP);
-  }, [router]);
+  //   setEmail(storedEmail);
+  //   setOtp(storedOTP);
+  // }, [router]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -57,17 +57,20 @@ const ResetPasswordForm = () => {
   }, [isSuccess, router]);
 
   const onSubmit = async (data: ResetPasswordFormData) => {
-    if (!email || !otp) return;
+    router.push("/login");
+
+    // if (!email || !otp) return;
 
     const payload = {
       email,
       password: data.newPassword,
     };
-    resetPassword(payload);
+
+    // resetPassword(payload);
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-119px)] items-center justify-center py-14">
+    <div className="flex min-h-dvh items-center justify-center py-14">
       <div className="border-brand-100 w-full max-w-120 rounded-xl border p-8 shadow-sm">
         <div className="mb-5 flex flex-col items-center text-center">
           <Logo />

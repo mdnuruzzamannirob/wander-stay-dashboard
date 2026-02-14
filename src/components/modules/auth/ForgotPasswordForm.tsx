@@ -36,15 +36,17 @@ const ForgotPasswordForm = () => {
   }, [isSuccess, router]);
 
   const onSubmit = async (data: ForgotPasswordFormData) => {
+    router.push("/verify-otp");
+
     const payload = {
       email: data.email,
     };
 
-    forgotPassword(payload);
+    // forgotPassword(payload);
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-119px)] items-center justify-center py-14">
+    <div className="flex min-h-dvh items-center justify-center py-14">
       <div className="border-brand-100 w-full max-w-120 rounded-xl border p-8 shadow-sm">
         <div className="mb-5 flex flex-col items-center text-center">
           <Logo />

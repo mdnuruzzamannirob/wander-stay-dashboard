@@ -26,15 +26,15 @@ const VerifyOtpForm = () => {
     }
   }, [isSuccess, router]);
 
-  useEffect(() => {
-    const storedEmail = sessionStorage.getItem("forgotPasswordEmail");
-    if (!storedEmail) {
-      router.push("/forgot-password");
-      return;
-    }
-    setEmail(storedEmail);
-    inputsRef.current[0]?.focus();
-  }, [router]);
+  // useEffect(() => {
+  //   const storedEmail = sessionStorage.getItem("forgotPasswordEmail");
+  //   if (!storedEmail) {
+  //     router.push("/forgot-password");
+  //     return;
+  //   }
+  //   setEmail(storedEmail);
+  //   inputsRef.current[0]?.focus();
+  // }, [router]);
 
   useEffect(() => {
     if (resendTimer > 0) {
@@ -82,18 +82,21 @@ const VerifyOtpForm = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    router.push("/reset-password");
+
     const otp = otpValues.join("");
 
-    if (otp.length !== 6) {
-      return;
-    }
+    // if (otp.length !== 6) {
+    //   return;
+    // }
 
     const payload = {
       email,
       verificationCode: otp,
     };
 
-    verifyOTP(payload);
+    // verifyOTP(payload);
   };
 
   const handleResendOtp = async () => {
@@ -104,7 +107,7 @@ const VerifyOtpForm = () => {
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-119px)] items-center justify-center py-14">
+    <div className="flex min-h-dvh items-center justify-center py-14">
       <div className="border-brand-100 w-full max-w-120 rounded-xl border p-8 shadow-sm">
         <div className="mb-5 flex flex-col items-center text-center">
           <Logo />

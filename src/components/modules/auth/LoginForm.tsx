@@ -31,17 +31,19 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      router.push("/");
+      router.push("/overview");
     }
   }, [isSuccess, router]);
 
   const onSubmit = (data: SignInFormData) => {
+    router.push("/overview");
+
     const payload = {
       email: data.email,
       password: data.password,
     };
 
-    signIn(payload);
+    // signIn(payload);
   };
 
   return (
