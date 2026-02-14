@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils/cn';
 import {
   LayoutDashboard,
-  ShoppingCart,
-  Package,
   Users,
   Settings,
   ChevronDown,
@@ -21,12 +19,13 @@ import {
   TrendingUp,
   ShoppingBag,
   UserCircle,
-  Boxes,
+  Book,
 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Logo from '../shared/Logo';
 import { useLogoutMutation } from '@/store/features/auth/authApi';
+import { useSidebar } from '@/hooks/useSidebar';
 
 const menuItems = [
   {
@@ -35,29 +34,19 @@ const menuItems = [
     path: '/overview',
   },
   {
-    label: 'User',
+    label: 'Users',
     icon: Users,
     path: '/users',
   },
   {
-    label: 'Products',
-    icon: Package,
-    path: '/products',
+    label: 'Bookings',
+    icon: Book,
+    path: '/bookings',
   },
   {
-    label: 'Orders',
-    icon: ShoppingCart,
-    path: '/orders',
-  },
-  {
-    label: 'Payments',
+    label: 'Payments & Finance',
     icon: CreditCard,
-    path: '/payments',
-  },
-  {
-    label: 'Category & Locker',
-    icon: Boxes,
-    path: '/category&locker',
+    path: '/payments-&-finance',
   },
   {
     label: 'Message',
@@ -115,7 +104,7 @@ const settingsSubMenu = [
 ];
 
 const Sidebar = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { sidebarOpen, setSidebarOpen } = useSidebar();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
