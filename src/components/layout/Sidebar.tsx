@@ -13,11 +13,8 @@ import {
   Info,
   Shield,
   FileText,
-  Workflow,
   ShieldCheck,
   HelpCircle,
-  TrendingUp,
-  ShoppingBag,
   UserCircle,
   Book,
 } from 'lucide-react';
@@ -49,9 +46,9 @@ const menuItems = [
     path: '/payments-&-finance',
   },
   {
-    label: 'Message',
+    label: 'Contact Message',
     icon: MessageSquare,
-    path: '/message',
+    path: '/contact-message',
   },
 ];
 
@@ -77,29 +74,14 @@ const settingsSubMenu = [
     path: '/terms-condition',
   },
   {
-    label: 'How it Works',
-    icon: Workflow,
-    path: '/how-it-works',
-  },
-  {
-    label: 'Trust & safety',
+    label: 'Cancellation Policy',
     icon: ShieldCheck,
-    path: '/trust-safety',
+    path: '/cancellation-policy',
   },
   {
-    label: 'Help Center',
+    label: 'FAQ',
     icon: HelpCircle,
-    path: '/help-center',
-  },
-  {
-    label: 'Selling guide',
-    icon: TrendingUp,
-    path: '/selling-guide',
-  },
-  {
-    label: 'Buying guide',
-    icon: ShoppingBag,
-    path: '/buying-guide',
+    path: '/faq',
   },
 ];
 
