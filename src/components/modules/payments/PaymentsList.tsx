@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Search,
   ChevronLeft,
@@ -12,6 +12,7 @@ import {
   ArrowDownRight,
 } from 'lucide-react';
 import TransactionDetailsDialog from './TransactionDetailsDialog';
+import { TableSkeleton, StatsCardsSkeleton } from '@/components/shared/skeletons';
 
 type Transaction = {
   id: string;
@@ -138,6 +139,76 @@ const allTransactions: Transaction[] = [
     status: 'Pending',
     method: 'Credit Card',
   },
+  {
+    id: '#TXN008',
+    user: 'Lisa Anderson',
+    email: 'lisa@example.com',
+    type: 'Payment',
+    amount: '$1,340',
+    date: '19-01-2026',
+    status: 'Completed',
+    method: 'Stripe',
+  },
+  {
+    id: '#TXN009',
+    user: 'Chris Taylor',
+    email: 'chris@example.com',
+    type: 'Payment',
+    amount: '$1,680',
+    date: '20-01-2026',
+    status: 'Completed',
+    method: 'Credit Card',
+  },
+  {
+    id: '#TXN010',
+    user: 'Amanda Clark',
+    email: 'amanda@example.com',
+    type: 'Refund',
+    amount: '$490',
+    date: '21-01-2026',
+    status: 'Completed',
+    method: 'PayPal',
+  },
+  {
+    id: '#TXN011',
+    user: 'Kevin White',
+    email: 'kevin@example.com',
+    type: 'Payment',
+    amount: '$760',
+    date: '22-01-2026',
+    status: 'Pending',
+    method: 'Bank Transfer',
+  },
+  {
+    id: '#TXN012',
+    user: 'Rachel Green',
+    email: 'rachel@example.com',
+    type: 'Payout',
+    amount: '$2,100',
+    date: '23-01-2026',
+    status: 'Completed',
+    method: 'Bank Transfer',
+  },
+  {
+    id: '#TXN013',
+    user: 'Thomas Moore',
+    email: 'thomas@example.com',
+    type: 'Payment',
+    amount: '$580',
+    date: '24-01-2026',
+    status: 'Failed',
+    method: 'Credit Card',
+  },
+  {
+    id: '#TXN014',
+    user: 'Olivia Harris',
+    email: 'olivia@example.com',
+    type: 'Payment',
+    amount: '$920',
+    date: '25-01-2026',
+    status: 'Completed',
+    method: 'Stripe',
+  },
 ];
 
 const statusColors: Record<string, string> = {
@@ -157,7 +228,13 @@ export default function PaymentsList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedTxn, setSelectedTxn] = useState<Transaction | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
-  const itemsPerPage = 5;
+  const [isLoading, setIsLoading] = useState(true);
+  const itemsPerPage = 10;
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const filtered = allTransactions.filter(
     (t) =>
@@ -169,6 +246,15 @@ export default function PaymentsList() {
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
   const paginated = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <StatsCardsSkeleton />
+        <TableSkeleton columns={8} rows={8} />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Finance Summary Cards */}
@@ -178,7 +264,7 @@ export default function PaymentsList() {
           return (
             <div
               key={item.label}
-              className="flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm"
+              className="flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4"
             >
               <div
                 className={`flex size-10 items-center justify-center rounded-full ${item.iconBg}`}
@@ -222,7 +308,7 @@ export default function PaymentsList() {
         </div>
 
         {/* Desktop Table */}
-        <div className="hidden overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm md:block">
+        <div className="hidden overflow-x-auto rounded-xl border border-gray-200 bg-white md:block">
           <table className="w-full text-left text-sm">
             <thead className="border-b border-gray-100 bg-gray-50/50">
               <tr>
@@ -279,7 +365,7 @@ export default function PaymentsList() {
         {/* Mobile Cards */}
         <div className="space-y-3 md:hidden">
           {paginated.map((txn, idx) => (
-            <div key={idx} className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+            <div key={idx} className="rounded-xl border border-gray-200 bg-white p-4">
               <div className="mb-3 flex items-center justify-between">
                 <div>
                   <span className="text-sm font-semibold text-gray-900">{txn.id}</span>
@@ -328,7 +414,7 @@ export default function PaymentsList() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex flex-col items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm sm:flex-row">
+          <div className="flex flex-col items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 sm:flex-row">
             <p className="text-sm text-gray-500">
               Showing {(currentPage - 1) * itemsPerPage + 1} to{' '}
               {Math.min(currentPage * itemsPerPage, filtered.length)} of {filtered.length}{' '}

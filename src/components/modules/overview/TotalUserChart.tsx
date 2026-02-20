@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { ChartSkeleton } from '@/components/shared/skeletons';
 import {
   AreaChart,
   Area,
@@ -88,8 +89,6 @@ const monthIndexMap: Record<string, number> = {
   December: 11,
 };
 
-const dayLabels = Array.from({ length: 31 }, (_, i) => `Day ${i + 1}`);
-
 function generateDailyData(monthIndex: number, _year: string) {
   const daysInMonth = new Date(Number(_year), monthIndex + 1, 0).getDate();
   return Array.from({ length: daysInMonth }, (_, i) => ({
@@ -112,10 +111,16 @@ function generateCustomRangeData(from: Date, to: Date) {
 }
 
 export default function TotalUserChart() {
+  const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<ChartFilterValue>({
     type: 'year',
     year: '2025',
   });
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1200);
+    return () => clearTimeout(timer);
+  }, []);
 
   const data = useMemo(() => {
     if (filter.type === 'year') {
@@ -131,8 +136,10 @@ export default function TotalUserChart() {
     return yearlyData['2025'];
   }, [filter]);
 
+  if (isLoading) return <ChartSkeleton />;
+
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+    <div className="rounded-xl border border-gray-200 bg-white p-4">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-base font-semibold text-gray-900">Total User</h3>
         <ChartFilterDropdown value={filter} onChange={setFilter} />

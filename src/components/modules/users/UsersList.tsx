@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, ChevronLeft, ChevronRight, Eye, Ban, MoreVertical } from 'lucide-react';
 import UserDetailsDialog from './UserDetailsDialog';
 import ConfirmDialog from '@/components/shared/ConfirmDialog';
+import { TableSkeleton } from '@/components/shared/skeletons';
 
 type User = {
   id: string;
@@ -88,6 +89,69 @@ const allUsers: User[] = [
     status: 'Active',
     totalBookings: 20,
   },
+  {
+    id: '#U009',
+    name: 'Chris Taylor',
+    email: 'chris@example.com',
+    phone: '+1 234 567 8909',
+    joinDate: '18-11-2025',
+    status: 'Active',
+    totalBookings: 9,
+  },
+  {
+    id: '#U010',
+    name: 'Amanda Clark',
+    email: 'amanda@example.com',
+    phone: '+1 234 567 8910',
+    joinDate: '25-11-2025',
+    status: 'Inactive',
+    totalBookings: 2,
+  },
+  {
+    id: '#U011',
+    name: 'Kevin White',
+    email: 'kevin@example.com',
+    phone: '+1 234 567 8911',
+    joinDate: '02-12-2025',
+    status: 'Active',
+    totalBookings: 11,
+  },
+  {
+    id: '#U012',
+    name: 'Rachel Green',
+    email: 'rachel@example.com',
+    phone: '+1 234 567 8912',
+    joinDate: '10-12-2025',
+    status: 'Active',
+    totalBookings: 7,
+  },
+  {
+    id: '#U013',
+    name: 'Thomas Moore',
+    email: 'thomas@example.com',
+    phone: '+1 234 567 8913',
+    joinDate: '15-12-2025',
+    status: 'Blocked',
+    totalBookings: 0,
+  },
+  {
+    id: '#U014',
+    name: 'Olivia Harris',
+    email: 'olivia@example.com',
+    phone: '+1 234 567 8914',
+    joinDate: '22-12-2025',
+    status: 'Active',
+    totalBookings: 14,
+  },
+  {
+    id: '#U015',
+    name: 'Daniel Kim',
+    email: 'daniel@example.com',
+    phone: '+1 234 567 8915',
+    joinDate: '01-01-2026',
+    status: 'Active',
+    totalBookings: 5,
+  },
 ];
 
 const statusColors: Record<string, string> = {
@@ -104,7 +168,13 @@ export default function UsersList() {
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [blockDialogOpen, setBlockDialogOpen] = useState(false);
   const [userToBlock, setUserToBlock] = useState<User | null>(null);
-  const itemsPerPage = 5;
+  const [isLoading, setIsLoading] = useState(true);
+  const itemsPerPage = 10;
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const filtered = allUsers.filter(
     (u) =>
@@ -115,6 +185,8 @@ export default function UsersList() {
 
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
   const paginated = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  if (isLoading) return <TableSkeleton columns={7} rows={8} />;
 
   return (
     <div className="space-y-4">
@@ -136,7 +208,7 @@ export default function UsersList() {
       </div>
 
       {/* Desktop Table */}
-      <div className="hidden overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm md:block">
+      <div className="hidden overflow-x-auto rounded-xl border border-gray-200 bg-white md:block">
         <table className="w-full text-left text-sm">
           <thead className="border-b border-gray-100 bg-gray-50/50">
             <tr>
@@ -212,7 +284,7 @@ export default function UsersList() {
       {/* Mobile Cards */}
       <div className="space-y-3 md:hidden">
         {paginated.map((user, idx) => (
-          <div key={idx} className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+          <div key={idx} className="rounded-xl border border-gray-200 bg-white p-4">
             <div className="mb-3 flex items-center justify-between">
               <div>
                 <p className="font-semibold text-gray-900">{user.name}</p>
@@ -268,7 +340,7 @@ export default function UsersList() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex flex-col items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm sm:flex-row">
+        <div className="flex flex-col items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 sm:flex-row">
           <p className="text-sm text-gray-500">
             Showing {(currentPage - 1) * itemsPerPage + 1} to{' '}
             {Math.min(currentPage * itemsPerPage, filtered.length)} of {filtered.length} users

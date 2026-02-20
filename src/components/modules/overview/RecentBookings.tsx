@@ -1,5 +1,8 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import { TableSkeleton } from '@/components/shared/skeletons';
+
 const bookings = [
   {
     id: '#I5FHM',
@@ -8,49 +11,58 @@ const bookings = [
     location: '123 Main St, New York',
     date: '12-01-2026',
     status: 'Completed',
-    price: '$1120',
+    price: '$1,120',
   },
   {
     id: '#O2HHM',
-    guest: 'John Smith',
-    email: 'john@example.com',
-    location: '123 Main St, New York',
+    guest: 'Jane Doe',
+    email: 'jane@example.com',
+    location: '456 Oak Ave, Los Angeles',
     date: '16-01-2026',
     status: 'Pending',
-    price: '$130',
+    price: '$830',
   },
   {
     id: '#I5HHM',
-    guest: 'John Smith',
-    email: 'john@example.com',
-    location: '123 Main St, New York',
+    guest: 'Robert Wilson',
+    email: 'robert@example.com',
+    location: '789 Pine Rd, Chicago',
     date: '15-01-2026',
     status: 'Completed',
-    price: '$120',
+    price: '$520',
   },
   {
     id: '#63DFE',
-    guest: 'John Smith',
-    email: 'john@example.com',
-    location: '123 Main St, New York',
+    guest: 'Emily Brown',
+    email: 'emily@example.com',
+    location: '321 Elm St, Houston',
     date: '13-01-2026',
     status: 'Pending',
-    price: '$70',
+    price: '$270',
   },
   {
-    id: '#63DFE',
-    guest: 'John Smith',
-    email: 'john@example.com',
-    location: '123 Main St, New York',
+    id: '#78GHJ',
+    guest: 'Michael Lee',
+    email: 'michael@example.com',
+    location: '555 Maple Dr, Miami',
     date: '14-01-2026',
     status: 'Completed',
-    price: '$150',
+    price: '$1,450',
   },
 ];
 
 export default function RecentBookings() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1400);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) return <TableSkeleton columns={6} rows={5} />;
+
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+    <div className="rounded-xl border border-gray-200 bg-white p-4">
       <h3 className="mb-4 text-base font-semibold text-gray-900">Recent Booking</h3>
 
       {/* Desktop Table */}
@@ -60,7 +72,7 @@ export default function RecentBookings() {
             <tr className="border-b border-gray-100">
               <th className="pb-3 font-medium text-gray-700">Booking ID</th>
               <th className="pb-3 font-medium text-gray-700">Guest</th>
-              <th className="pb-3 font-medium text-gray-700">Locker Location</th>
+              <th className="pb-3 font-medium text-gray-700">Location</th>
               <th className="pb-3 font-medium text-gray-700">Date</th>
               <th className="pb-3 font-medium text-gray-700">Status</th>
               <th className="pb-3 font-medium text-gray-700">Price</th>

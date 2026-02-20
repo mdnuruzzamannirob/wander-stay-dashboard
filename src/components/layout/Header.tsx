@@ -26,8 +26,8 @@ export default function PageHeader({
         >
           <Menu className="size-5" />
         </Button>
-      </div>{' '}
-      <p className="text-sm text-gray-500">{description}</p>
+      </div>
+      {description && <p className="text-sm text-gray-500">{description}</p>}
     </div>
   );
 }

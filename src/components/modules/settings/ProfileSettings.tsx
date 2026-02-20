@@ -21,7 +21,7 @@ export default function ProfileSettings() {
   return (
     <div className="space-y-6">
       {/* Profile Card */}
-      <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-xl border border-gray-200 bg-white p-6">
         <h3 className="mb-6 text-base font-semibold text-gray-900">Personal Information</h3>
 
         <div className="flex flex-col items-start gap-6 sm:flex-row">
@@ -112,7 +112,7 @@ export default function ProfileSettings() {
       </div>
 
       {/* Change Password */}
-      <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-xl border border-gray-200 bg-white p-6">
         <h3 className="mb-6 text-base font-semibold text-gray-900">Change Password</h3>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">

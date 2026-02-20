@@ -1,6 +1,8 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { DollarSign, Users, Hotel, CalendarCheck } from 'lucide-react';
+import { StatsCardsSkeleton } from '@/components/shared/skeletons';
 
 const stats = [
   {
@@ -38,6 +40,15 @@ const stats = [
 ];
 
 export default function StatsCards() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) return <StatsCardsSkeleton />;
+
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {stats.map((stat) => {
@@ -45,7 +56,7 @@ export default function StatsCards() {
         return (
           <div
             key={stat.label}
-            className="flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm"
+            className="flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4"
           >
             <div className={`flex size-10 items-center justify-center rounded-full ${stat.iconBg}`}>
               <Icon className={`size-5 ${stat.iconColor}`} />

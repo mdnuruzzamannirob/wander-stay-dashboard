@@ -176,7 +176,7 @@ export default function ChartFilterDropdown({ value, onChange }: ChartFilterDrop
                   mode="range"
                   selected={dateRange}
                   onSelect={setDateRange}
-                  numberOfMonths={1}
+                  numberOfMonths={2}
                   className="rounded-md border border-gray-100"
                 />
                 <Button

@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import ButtonComp from "@/components/shared/ButtonComp";
-import Logo from "@/components/shared/Logo";
-import { signInSchema, SignInFormData } from "@/lib/schemas/auth";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { AlertCircle, Eye, EyeOff } from "lucide-react";
-import { useSignInMutation } from "@/store/features/auth/authApi";
+import ButtonComp from '@/components/shared/ButtonComp';
+import Logo from '@/components/shared/Logo';
+import { signInSchema, SignInFormData } from '@/lib/schemas/auth';
+import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { AlertCircle, Eye, EyeOff } from 'lucide-react';
+// import { useSignInMutation } from "@/store/features/auth/authApi";
 
 const LoginForm = () => {
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const [signIn, { isLoading: isSigningIn, isSuccess }] = useSignInMutation();
+  // const [signIn, { isLoading: isSigningIn, isSuccess }] = useSignInMutation();
 
   const {
     register,
@@ -24,55 +24,35 @@ const LoginForm = () => {
     formState: { errors, isSubmitting },
   } = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
-    mode: "onChange",
+    mode: 'onChange',
   });
 
-  const isLoading = isSigningIn || isSubmitting;
-
-  useEffect(() => {
-    if (isSuccess) {
-      router.push("/overview");
-    }
-  }, [isSuccess, router]);
+  const isLoading = isSubmitting;
 
   const onSubmit = (data: SignInFormData) => {
-    router.push("/overview");
-
-    const payload = {
-      email: data.email,
-      password: data.password,
-    };
-
-    // signIn(payload);
+    router.push('/overview');
   };
 
   return (
     <div className="flex min-h-dvh items-center justify-center py-14">
-      <div className="border-brand-100 w-full max-w-120 rounded-xl border p-8 shadow-sm">
+      <div className="border-brand-100 w-full max-w-120 rounded-xl border p-8">
         {/* Title */}
         <div className="mb-5 flex flex-col items-center text-center">
           <Logo />
-          <h2 className="text-primary mt-3 text-2xl font-semibold">
-            Welcome Back
-          </h2>
-          <p className="text-sm text-slate-500">
-            Sign in to your account to continue
-          </p>
+          <h2 className="text-primary mt-3 text-2xl font-semibold">Welcome Back</h2>
+          <p className="text-sm text-slate-500">Sign in to your account to continue</p>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Email */}
           <div>
-            <label
-              htmlFor="email"
-              className="mb-1 block text-sm font-medium text-slate-500"
-            >
+            <label htmlFor="email" className="mb-1 block text-sm font-medium text-slate-500">
               Email <span className="text-red-500">*</span>
             </label>
             <div className="relative">
               <input
-                {...register("email")}
+                {...register('email')}
                 type="email"
                 id="email"
                 placeholder="you@example.com"
@@ -91,10 +71,7 @@ const LoginForm = () => {
           {/* Password */}
           <div>
             <div className="mb-1 flex items-center justify-between">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-slate-500"
-              >
+              <label htmlFor="password" className="block text-sm font-medium text-slate-500">
                 Password <span className="text-red-500">*</span>
               </label>
               <Link
@@ -106,8 +83,8 @@ const LoginForm = () => {
             </div>
             <div className="relative">
               <input
-                {...register("password")}
-                type={showPassword ? "text" : "password"}
+                {...register('password')}
+                type={showPassword ? 'text' : 'password'}
                 id="password"
                 placeholder="Enter your password"
                 disabled={isLoading}

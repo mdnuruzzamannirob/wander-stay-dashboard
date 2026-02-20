@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { cn } from '@/lib/utils/cn';
 import {
   LayoutDashboard,
@@ -21,7 +21,7 @@ import {
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Logo from '../shared/Logo';
-import { useLogoutMutation } from '@/store/features/auth/authApi';
+// import { useLogoutMutation } from '@/store/features/auth/authApi';
 import { useSidebar } from '@/hooks/useSidebar';
 
 const menuItems = [
@@ -99,13 +99,17 @@ const Sidebar = () => {
     profileImage:
       'https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D',
   };
-  const [logout, { isLoading: isLogoutLoading, isSuccess }] = useLogoutMutation();
 
-  useEffect(() => {
-    if (isSuccess) {
-      router.push('/login');
-    }
-  }, [isSuccess, router]);
+  // const [logout, { isLoading: isLogoutLoading, isSuccess }] = useLogoutMutation();
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     router.push('/login');
+  //   }
+  // }, [isSuccess, router]);
+
+  const handleLogout = () => {
+    router.push('/login');
+  };
 
   const isSettingsActive = settingsSubMenu.some((item) => pathname === item.path);
 
@@ -211,16 +215,19 @@ const Sidebar = () => {
         {/* Logout */}
         <div className="flex items-center justify-between gap-2 border-t border-gray-200 p-3">
           <div className="flex min-w-0 items-center gap-2">
-            <div className="size-10 shrink-0 rounded-full bg-slate-200"></div>
+            <img
+              src={user?.profileImage}
+              alt={user?.name}
+              className="size-10 shrink-0 rounded-full bg-slate-200 object-cover"
+            />
             <div className="min-w-0">
               <h1 className="text-foreground truncate leading-4 font-medium">{user?.name}</h1>
               <p className="text-muted-foreground truncate text-xs">{user?.email}</p>
             </div>
           </div>
           <button
-            onClick={() => logout()}
-            disabled={isLogoutLoading}
-            className="hover: flex size-10 shrink-0 items-center justify-center rounded-full border border-red-100 bg-red-50 text-red-600 transition"
+            onClick={handleLogout}
+            className="flex size-10 shrink-0 items-center justify-center rounded-full border border-red-100 bg-red-50 text-red-600 transition hover:bg-red-100"
           >
             <LogOut className="size-4" />
           </button>

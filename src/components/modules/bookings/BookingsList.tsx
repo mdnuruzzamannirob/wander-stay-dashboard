@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, ChevronLeft, ChevronRight, Eye } from 'lucide-react';
 import BookingDetailsDialog from './BookingDetailsDialog';
+import { TableSkeleton } from '@/components/shared/skeletons';
 
 type Booking = {
   id: string;
@@ -96,6 +97,76 @@ const allBookings: Booking[] = [
     status: 'Pending',
     price: '$340',
   },
+  {
+    id: '#55TUV',
+    guest: 'Chris Taylor',
+    email: 'chris@example.com',
+    location: '800 Sunset Blvd, San Francisco',
+    checkIn: '20-01-2026',
+    checkOut: '24-01-2026',
+    status: 'Completed',
+    price: '$1,680',
+  },
+  {
+    id: '#77WXY',
+    guest: 'Amanda Clark',
+    email: 'amanda@example.com',
+    location: '42 River Rd, Portland',
+    checkIn: '21-01-2026',
+    checkOut: '25-01-2026',
+    status: 'Cancelled',
+    price: '$490',
+  },
+  {
+    id: '#33ZAB',
+    guest: 'Kevin White',
+    email: 'kevin@example.com',
+    location: '210 Broadway, Nashville',
+    checkIn: '22-01-2026',
+    checkOut: '26-01-2026',
+    status: 'Completed',
+    price: '$760',
+  },
+  {
+    id: '#88CDE',
+    guest: 'Rachel Green',
+    email: 'rachel@example.com',
+    location: '55 Park Ave, Atlanta',
+    checkIn: '23-01-2026',
+    checkOut: '27-01-2026',
+    status: 'Pending',
+    price: '$1,020',
+  },
+  {
+    id: '#66FGH',
+    guest: 'Thomas Moore',
+    email: 'thomas@example.com',
+    location: '333 Lake Dr, Minneapolis',
+    checkIn: '24-01-2026',
+    checkOut: '28-01-2026',
+    status: 'Completed',
+    price: '$580',
+  },
+  {
+    id: '#22IJK',
+    guest: 'Olivia Harris',
+    email: 'olivia@example.com',
+    location: '900 Palm St, San Diego',
+    checkIn: '25-01-2026',
+    checkOut: '29-01-2026',
+    status: 'Pending',
+    price: '$1,340',
+  },
+  {
+    id: '#44LMN',
+    guest: 'Daniel Kim',
+    email: 'daniel@example.com',
+    location: '78 Ocean Ave, Honolulu',
+    checkIn: '26-01-2026',
+    checkOut: '30-01-2026',
+    status: 'Cancelled',
+    price: '$2,100',
+  },
 ];
 
 const statusColors: Record<string, string> = {
@@ -109,7 +180,13 @@ export default function BookingsList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
-  const itemsPerPage = 5;
+  const [isLoading, setIsLoading] = useState(true);
+  const itemsPerPage = 10;
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const filtered = allBookings.filter(
     (b) =>
@@ -120,6 +197,8 @@ export default function BookingsList() {
 
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
   const paginated = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  if (isLoading) return <TableSkeleton columns={8} rows={8} />;
 
   return (
     <div className="space-y-4">
@@ -141,7 +220,7 @@ export default function BookingsList() {
       </div>
 
       {/* Desktop Table */}
-      <div className="hidden overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm md:block">
+      <div className="hidden overflow-x-auto rounded-xl border border-gray-200 bg-white md:block">
         <table className="w-full text-left text-sm">
           <thead className="border-b border-gray-100 bg-gray-50/50">
             <tr>
@@ -196,7 +275,7 @@ export default function BookingsList() {
       {/* Mobile Cards */}
       <div className="space-y-3 md:hidden">
         {paginated.map((booking, idx) => (
-          <div key={idx} className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+          <div key={idx} className="rounded-xl border border-gray-200 bg-white p-4">
             <div className="mb-3 flex items-center justify-between">
               <span className="text-sm font-semibold text-gray-900">{booking.id}</span>
               <span
@@ -244,7 +323,7 @@ export default function BookingsList() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm">
+        <div className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-3">
           <p className="text-sm text-gray-500">
             Showing {(currentPage - 1) * itemsPerPage + 1} to{' '}
             {Math.min(currentPage * itemsPerPage, filtered.length)} of {filtered.length} bookings

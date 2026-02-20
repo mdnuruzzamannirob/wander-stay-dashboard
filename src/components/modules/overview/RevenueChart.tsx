@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { ChartSkeleton } from '@/components/shared/skeletons';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import ChartFilterDropdown, {
   type ChartFilterValue,
@@ -102,10 +103,16 @@ function generateCustomRangeData(from: Date, to: Date) {
 }
 
 export default function RevenueChart() {
+  const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<ChartFilterValue>({
     type: 'year',
     year: '2025',
   });
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1200);
+    return () => clearTimeout(timer);
+  }, []);
 
   const data = useMemo(() => {
     if (filter.type === 'year') {
@@ -121,8 +128,10 @@ export default function RevenueChart() {
     return yearlyData['2025'];
   }, [filter]);
 
+  if (isLoading) return <ChartSkeleton />;
+
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+    <div className="rounded-xl border border-gray-200 bg-white p-4">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-base font-semibold text-gray-900">Revenue Overview</h3>
         <ChartFilterDropdown value={filter} onChange={setFilter} />

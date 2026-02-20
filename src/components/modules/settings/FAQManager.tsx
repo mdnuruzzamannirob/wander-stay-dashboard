@@ -70,7 +70,7 @@ export default function FAQManager() {
           return (
             <div
               key={faq.id}
-              className="rounded-xl border border-gray-200 bg-white shadow-sm transition hover:border-gray-300"
+              className="rounded-xl border border-gray-200 bg-white transition hover:border-gray-300"
             >
               {/* Header */}
               <button

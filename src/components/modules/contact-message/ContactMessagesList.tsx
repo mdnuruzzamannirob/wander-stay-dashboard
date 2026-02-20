@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, ChevronLeft, ChevronRight, Eye, Trash2, Mail } from 'lucide-react';
 import MessageViewDialog from './MessageViewDialog';
 import MessageReplyDialog from './MessageReplyDialog';
 import ConfirmDialog from '@/components/shared/ConfirmDialog';
+import { TableSkeleton } from '@/components/shared/skeletons';
 
 type Message = {
   id: string;
@@ -80,6 +81,69 @@ const allMessages: Message[] = [
     date: '18-01-2026',
     status: 'Read',
   },
+  {
+    id: '#M008',
+    name: 'Lisa Anderson',
+    email: 'lisa@example.com',
+    subject: 'Booking modification',
+    message: 'I need to change my check-in date from January 19 to January 21...',
+    date: '19-01-2026',
+    status: 'Unread',
+  },
+  {
+    id: '#M009',
+    name: 'Chris Taylor',
+    email: 'chris@example.com',
+    subject: 'Loyalty program question',
+    message: 'How do I earn points on my bookings? I could not find info...',
+    date: '20-01-2026',
+    status: 'Read',
+  },
+  {
+    id: '#M010',
+    name: 'Amanda Clark',
+    email: 'amanda@example.com',
+    subject: 'Check-in assistance',
+    message: 'I will be arriving late at night. Can I still check in after midnight?',
+    date: '21-01-2026',
+    status: 'Unread',
+  },
+  {
+    id: '#M011',
+    name: 'Kevin White',
+    email: 'kevin@example.com',
+    subject: 'Review removal request',
+    message: 'I left a negative review by mistake. Can you help me update it?',
+    date: '22-01-2026',
+    status: 'Read',
+  },
+  {
+    id: '#M012',
+    name: 'Rachel Green',
+    email: 'rachel@example.com',
+    subject: 'Group booking discount',
+    message: 'We have a group of 20 people traveling together. Do you offer discounts?',
+    date: '23-01-2026',
+    status: 'Unread',
+  },
+  {
+    id: '#M013',
+    name: 'Thomas Moore',
+    email: 'thomas@example.com',
+    subject: 'Technical issue',
+    message: 'The mobile app keeps crashing when I try to view my upcoming reservations...',
+    date: '24-01-2026',
+    status: 'Unread',
+  },
+  {
+    id: '#M014',
+    name: 'Olivia Harris',
+    email: 'olivia@example.com',
+    subject: 'Gift card inquiry',
+    message: 'Do you offer gift cards that can be used for hotel bookings?',
+    date: '25-01-2026',
+    status: 'Read',
+  },
 ];
 
 const statusColors: Record<string, string> = {
@@ -95,7 +159,13 @@ export default function ContactMessagesList() {
   const [replyOpen, setReplyOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [messageToDelete, setMessageToDelete] = useState<Message | null>(null);
-  const itemsPerPage = 5;
+  const [isLoading, setIsLoading] = useState(true);
+  const itemsPerPage = 10;
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const filtered = allMessages.filter(
     (m) =>
@@ -106,6 +176,8 @@ export default function ContactMessagesList() {
 
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
   const paginated = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  if (isLoading) return <TableSkeleton columns={6} rows={8} />;
 
   return (
     <div className="space-y-4">
@@ -127,7 +199,7 @@ export default function ContactMessagesList() {
       </div>
 
       {/* Desktop Table */}
-      <div className="hidden overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm md:block">
+      <div className="hidden overflow-x-auto rounded-xl border border-gray-200 bg-white md:block">
         <table className="w-full text-left text-sm">
           <thead className="border-b border-gray-100 bg-gray-50/50">
             <tr>
@@ -198,7 +270,7 @@ export default function ContactMessagesList() {
       {/* Mobile Cards */}
       <div className="space-y-3 md:hidden">
         {paginated.map((msg, idx) => (
-          <div key={idx} className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+          <div key={idx} className="rounded-xl border border-gray-200 bg-white p-4">
             <div className="mb-2 flex items-start justify-between">
               <div>
                 <p className="font-semibold text-gray-900">{msg.name}</p>
@@ -255,7 +327,7 @@ export default function ContactMessagesList() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex flex-col items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm sm:flex-row">
+        <div className="flex flex-col items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 sm:flex-row">
           <p className="text-sm text-gray-500">
             Showing {(currentPage - 1) * itemsPerPage + 1} to{' '}
             {Math.min(currentPage * itemsPerPage, filtered.length)} of {filtered.length} messages

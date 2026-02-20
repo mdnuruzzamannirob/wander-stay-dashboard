@@ -34,7 +34,7 @@ export default function CMSEditor({ pageTitle, pageDescription, initialSections 
   return (
     <div className="space-y-6">
       {/* Page Info */}
-      <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-xl border border-gray-200 bg-white p-6">
         <div className="mb-1 flex items-center gap-2">
           <h3 className="text-base font-semibold text-gray-900">{pageTitle}</h3>
         </div>
@@ -46,7 +46,7 @@ export default function CMSEditor({ pageTitle, pageDescription, initialSections 
         {sections.map((section, index) => (
           <div
             key={section.id}
-            className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:border-gray-300"
+            className="rounded-xl border border-gray-200 bg-white p-5 transition hover:border-gray-300"
           >
             <div className="mb-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
