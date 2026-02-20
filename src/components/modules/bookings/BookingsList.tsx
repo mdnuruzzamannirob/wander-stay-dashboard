@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Search, ChevronLeft, ChevronRight, Eye } from 'lucide-react';
+import BookingDetailsDialog from './BookingDetailsDialog';
 
 type Booking = {
   id: string;
@@ -106,6 +107,8 @@ const statusColors: Record<string, string> = {
 export default function BookingsList() {
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
   const itemsPerPage = 5;
 
   const filtered = allBookings.filter(
@@ -174,7 +177,13 @@ export default function BookingsList() {
                 </td>
                 <td className="px-4 py-3 font-medium text-gray-900">{booking.price}</td>
                 <td className="px-4 py-3">
-                  <button className="hover:text-primary rounded-md p-1.5 text-gray-500 transition hover:bg-gray-100">
+                  <button
+                    onClick={() => {
+                      setSelectedBooking(booking);
+                      setDetailsOpen(true);
+                    }}
+                    className="hover:text-primary rounded-md p-1.5 text-gray-500 transition hover:bg-gray-100"
+                  >
                     <Eye className="size-4" />
                   </button>
                 </td>
@@ -219,7 +228,13 @@ export default function BookingsList() {
               </div>
             </div>
             <div className="mt-3 flex justify-end">
-              <button className="flex items-center gap-1.5 rounded-md border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition hover:bg-gray-50">
+              <button
+                onClick={() => {
+                  setSelectedBooking(booking);
+                  setDetailsOpen(true);
+                }}
+                className="flex items-center gap-1.5 rounded-md border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition hover:bg-gray-50"
+              >
                 <Eye className="size-3.5" /> View
               </button>
             </div>
@@ -263,6 +278,11 @@ export default function BookingsList() {
           </div>
         </div>
       )}
+      <BookingDetailsDialog
+        open={detailsOpen}
+        onOpenChange={setDetailsOpen}
+        booking={selectedBooking}
+      />
     </div>
   );
 }

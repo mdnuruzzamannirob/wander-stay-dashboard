@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { Search, ChevronLeft, ChevronRight, Eye, Ban, MoreVertical } from 'lucide-react';
+import UserDetailsDialog from './UserDetailsDialog';
+import ConfirmDialog from '@/components/shared/ConfirmDialog';
 
 type User = {
   id: string;
@@ -98,6 +100,10 @@ export default function UsersList() {
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [blockDialogOpen, setBlockDialogOpen] = useState(false);
+  const [userToBlock, setUserToBlock] = useState<User | null>(null);
   const itemsPerPage = 5;
 
   const filtered = allUsers.filter(
@@ -173,10 +179,24 @@ export default function UsersList() {
                     </button>
                     {openMenuId === user.id && (
                       <div className="absolute right-0 z-10 mt-1 w-36 rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
-                        <button className="flex w-full items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50">
+                        <button
+                          onClick={() => {
+                            setSelectedUser(user);
+                            setDetailsOpen(true);
+                            setOpenMenuId(null);
+                          }}
+                          className="flex w-full items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50"
+                        >
                           <Eye className="size-3.5" /> View Details
                         </button>
-                        <button className="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-red-50">
+                        <button
+                          onClick={() => {
+                            setUserToBlock(user);
+                            setBlockDialogOpen(true);
+                            setOpenMenuId(null);
+                          }}
+                          className="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-red-50"
+                        >
                           <Ban className="size-3.5" /> Block User
                         </button>
                       </div>
@@ -223,10 +243,22 @@ export default function UsersList() {
               </div>
             </div>
             <div className="mt-3 flex justify-end gap-2">
-              <button className="flex items-center gap-1.5 rounded-md border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition hover:bg-gray-50">
+              <button
+                onClick={() => {
+                  setSelectedUser(user);
+                  setDetailsOpen(true);
+                }}
+                className="flex items-center gap-1.5 rounded-md border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition hover:bg-gray-50"
+              >
                 <Eye className="size-3.5" /> View
               </button>
-              <button className="flex items-center gap-1.5 rounded-md border border-red-200 px-3 py-1.5 text-xs font-medium text-red-500 transition hover:bg-red-50">
+              <button
+                onClick={() => {
+                  setUserToBlock(user);
+                  setBlockDialogOpen(true);
+                }}
+                className="flex items-center gap-1.5 rounded-md border border-red-200 px-3 py-1.5 text-xs font-medium text-red-500 transition hover:bg-red-50"
+              >
                 <Ban className="size-3.5" /> Block
               </button>
             </div>
@@ -270,6 +302,22 @@ export default function UsersList() {
           </div>
         </div>
       )}
+
+      <UserDetailsDialog open={detailsOpen} onOpenChange={setDetailsOpen} user={selectedUser} />
+
+      <ConfirmDialog
+        open={blockDialogOpen}
+        onOpenChange={setBlockDialogOpen}
+        title="Block User"
+        description={`Are you sure you want to block ${userToBlock?.name ?? 'this user'}? They will no longer be able to access their account.`}
+        confirmLabel="Block User"
+        variant="destructive"
+        onConfirm={() => {
+          // TODO: Call block user API
+          setBlockDialogOpen(false);
+          setUserToBlock(null);
+        }}
+      />
     </div>
   );
 }

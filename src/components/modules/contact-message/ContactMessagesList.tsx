@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 import { Search, ChevronLeft, ChevronRight, Eye, Trash2, Mail } from 'lucide-react';
+import MessageViewDialog from './MessageViewDialog';
+import MessageReplyDialog from './MessageReplyDialog';
+import ConfirmDialog from '@/components/shared/ConfirmDialog';
 
 type Message = {
   id: string;
@@ -87,6 +90,11 @@ const statusColors: Record<string, string> = {
 export default function ContactMessagesList() {
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
+  const [viewOpen, setViewOpen] = useState(false);
+  const [replyOpen, setReplyOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [messageToDelete, setMessageToDelete] = useState<Message | null>(null);
   const itemsPerPage = 5;
 
   const filtered = allMessages.filter(
@@ -141,7 +149,7 @@ export default function ContactMessagesList() {
                     <p className="text-xs text-gray-500">{msg.email}</p>
                   </div>
                 </td>
-                <td className="max-w-[200px] truncate px-4 py-3 text-gray-600">{msg.subject}</td>
+                <td className="max-w-50 truncate px-4 py-3 text-gray-600">{msg.subject}</td>
                 <td className="px-4 py-3 text-gray-600">{msg.date}</td>
                 <td className="px-4 py-3">
                   <span
@@ -152,13 +160,31 @@ export default function ContactMessagesList() {
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1">
-                    <button className="hover:text-primary rounded-md p-1.5 text-gray-500 transition hover:bg-gray-100">
+                    <button
+                      onClick={() => {
+                        setSelectedMessage(msg);
+                        setViewOpen(true);
+                      }}
+                      className="hover:text-primary rounded-md p-1.5 text-gray-500 transition hover:bg-gray-100"
+                    >
                       <Eye className="size-4" />
                     </button>
-                    <button className="rounded-md p-1.5 text-gray-500 transition hover:bg-blue-50 hover:text-blue-500">
+                    <button
+                      onClick={() => {
+                        setSelectedMessage(msg);
+                        setReplyOpen(true);
+                      }}
+                      className="rounded-md p-1.5 text-gray-500 transition hover:bg-blue-50 hover:text-blue-500"
+                    >
                       <Mail className="size-4" />
                     </button>
-                    <button className="rounded-md p-1.5 text-gray-500 transition hover:bg-red-50 hover:text-red-500">
+                    <button
+                      onClick={() => {
+                        setMessageToDelete(msg);
+                        setDeleteOpen(true);
+                      }}
+                      className="rounded-md p-1.5 text-gray-500 transition hover:bg-red-50 hover:text-red-500"
+                    >
                       <Trash2 className="size-4" />
                     </button>
                   </div>
@@ -195,13 +221,31 @@ export default function ContactMessagesList() {
               </div>
             </div>
             <div className="mt-3 flex justify-end gap-2">
-              <button className="flex items-center gap-1.5 rounded-md border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition hover:bg-gray-50">
+              <button
+                onClick={() => {
+                  setSelectedMessage(msg);
+                  setViewOpen(true);
+                }}
+                className="flex items-center gap-1.5 rounded-md border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition hover:bg-gray-50"
+              >
                 <Eye className="size-3.5" /> View
               </button>
-              <button className="flex items-center gap-1.5 rounded-md border border-blue-200 px-3 py-1.5 text-xs font-medium text-blue-500 transition hover:bg-blue-50">
+              <button
+                onClick={() => {
+                  setSelectedMessage(msg);
+                  setReplyOpen(true);
+                }}
+                className="flex items-center gap-1.5 rounded-md border border-blue-200 px-3 py-1.5 text-xs font-medium text-blue-500 transition hover:bg-blue-50"
+              >
                 <Mail className="size-3.5" /> Reply
               </button>
-              <button className="flex items-center gap-1.5 rounded-md border border-red-200 px-3 py-1.5 text-xs font-medium text-red-500 transition hover:bg-red-50">
+              <button
+                onClick={() => {
+                  setMessageToDelete(msg);
+                  setDeleteOpen(true);
+                }}
+                className="flex items-center gap-1.5 rounded-md border border-red-200 px-3 py-1.5 text-xs font-medium text-red-500 transition hover:bg-red-50"
+              >
                 <Trash2 className="size-3.5" /> Delete
               </button>
             </div>
@@ -245,6 +289,24 @@ export default function ContactMessagesList() {
           </div>
         </div>
       )}
+
+      <MessageViewDialog open={viewOpen} onOpenChange={setViewOpen} message={selectedMessage} />
+
+      <MessageReplyDialog open={replyOpen} onOpenChange={setReplyOpen} message={selectedMessage} />
+
+      <ConfirmDialog
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+        title="Delete Message"
+        description={`Are you sure you want to delete the message from ${messageToDelete?.name ?? 'this sender'}? This action cannot be undone.`}
+        confirmLabel="Delete"
+        variant="destructive"
+        onConfirm={() => {
+          // TODO: Call delete message API
+          setDeleteOpen(false);
+          setMessageToDelete(null);
+        }}
+      />
     </div>
   );
 }

@@ -11,6 +11,7 @@ import {
   TrendingDown,
   ArrowDownRight,
 } from 'lucide-react';
+import TransactionDetailsDialog from './TransactionDetailsDialog';
 
 type Transaction = {
   id: string;
@@ -154,6 +155,8 @@ const typeColors: Record<string, string> = {
 export default function PaymentsList() {
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedTxn, setSelectedTxn] = useState<Transaction | null>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
   const itemsPerPage = 5;
 
   const filtered = allTransactions.filter(
@@ -257,7 +260,13 @@ export default function PaymentsList() {
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <button className="hover:text-primary rounded-md p-1.5 text-gray-500 transition hover:bg-gray-100">
+                    <button
+                      onClick={() => {
+                        setSelectedTxn(txn);
+                        setDetailsOpen(true);
+                      }}
+                      className="hover:text-primary rounded-md p-1.5 text-gray-500 transition hover:bg-gray-100"
+                    >
                       <Eye className="size-4" />
                     </button>
                   </td>
@@ -303,7 +312,13 @@ export default function PaymentsList() {
                 </div>
               </div>
               <div className="mt-3 flex justify-end">
-                <button className="flex items-center gap-1.5 rounded-md border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition hover:bg-gray-50">
+                <button
+                  onClick={() => {
+                    setSelectedTxn(txn);
+                    setDetailsOpen(true);
+                  }}
+                  className="flex items-center gap-1.5 rounded-md border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition hover:bg-gray-50"
+                >
                   <Eye className="size-3.5" /> View
                 </button>
               </div>
@@ -351,6 +366,12 @@ export default function PaymentsList() {
           </div>
         )}
       </div>
+
+      <TransactionDetailsDialog
+        open={detailsOpen}
+        onOpenChange={setDetailsOpen}
+        transaction={selectedTxn}
+      />
     </div>
   );
 }
